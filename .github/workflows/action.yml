@@ -8,4 +8,4 @@ jobs:
         run: |
           sudo apt-get install -y neofetch
           neofetch
-          sleep 10
+          ip address show
