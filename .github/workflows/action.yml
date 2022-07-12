@@ -6,4 +6,4 @@ jobs:
     steps:
       - name: Try to install something
         run: |
-          curl ifconfig.me/all
+          docker run hello-world
