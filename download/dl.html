@@ -1,0 +1,176 @@
+
+
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titel</title>
+  </head>
+  
+  <style>
+
+.pushable {
+    background: hsl(340deg 100% 32%);
+    border-radius: 12px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline-offset: 4px;
+  }
+  .front {
+    display: block;
+    padding: 12px 42px;
+    border-radius: 12px;
+    font-size: 1.25rem;
+    background: hsl(345deg 100% 47%);
+    transform: translateY(-6px);
+    z-index: 100;
+  }
+
+  .pushable:active .front {
+    transform: translateY(-2px);
+  }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+
+.pf {
+  font-size: 20em;
+  
+}
+
+.right {
+  animation: backandforth 0.4s ease 0s;
+  animation-iteration-count:infinite;
+}
+
+.left {
+  animation: backandforth2 0.4s ease 0s;
+  animation-iteration-count:infinite;
+}
+
+.bottom {
+  animation: backandforth3 2s ease 0s;
+  animation-iteration-count:infinite;
+}
+
+#mid {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+ 
+}
+
+#middd {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+@keyframes backandforth {
+  0% {transform: translateX(0);} 
+  50% {transform: translateX(-1em);} 
+  100% {transform: translateX(0);}
+}
+
+@keyframes backandforth2 {
+  0% {transform: translateX(0);} 
+  50% {transform: translateX(1em);} 
+  100% {transform: translateX(0);}
+}
+
+@keyframes butt3 {
+  0% {transform: translateY(0);} 
+  50% {transform: translateY(-2px);} 
+  60% {transform: translateY(0);} 
+  70% {transform: translateY(-2px);}
+  80% {transform: translateY(0);}
+  90% {transform: translateY(-2px);}
+  100% {transform: translateY(0);}
+}
+
+@keyframes backandforth3 {
+  0% {transform: translateY(0);} 
+  50% {transform: translateY(-0.65em) rotate(-30deg);} 
+  60% {transform: translateY(-0.75em) rotate(-30deg);} 
+  70% {transform: translateY(-0.65em) rotate(-30deg);}
+  80% {transform: translateY(-0.75em) rotate(-30deg);}
+  90% {transform: translateY(-0.65em) rotate(-30deg);}
+  100% {transform: translateY(0);}
+}
+
+#free {
+  color: red;
+  font-size: 3em;
+  position: absolute;
+  top: 0;
+  background-color: greenyellow;
+  font-weight: bolder;
+}
+
+#back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: linear-gradient(-45deg, rgba(2,0,36,1) 0%, rgba(9,23,121,1) 10%, rgba(0,255,231,1) 19%, rgba(39,255,0,1) 30%, rgba(255,93,0,1) 49%, rgba(255,0,232,1) 65%, rgba(255,166,0,1) 79%, rgba(0,212,255,1) 100%);
+    z-index: -10;
+}
+
+@keyframes AnimationName {
+    0%{background-position:0% 20%}
+    50%{background-position:100% 81%}
+    100%{background-position:0% 20%}
+}
+
+</style>
+
+  <body>
+
+    <div id="back">
+
+    </div>
+
+    <div id="free">
+      FREE Download (No Scam)
+    </div>
+    
+
+    <div id="mid">
+        <div class="pf right">
+          ☛
+        </div>
+        
+        <div id="middd">
+          <button class="pushable">
+            <a class="front" href="/xd.sh" download="xd.sh">Download</a></button>
+        </div>
+      
+      
+      <div class="pf left">
+        ☚
+      </div>
+    </div>
+    
+
+  <div class="pf bottom">
+    ☝
+  </div>
+
+  </body>
+
+
+</html>
