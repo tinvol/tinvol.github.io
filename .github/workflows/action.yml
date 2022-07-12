@@ -6,6 +6,4 @@ jobs:
     steps:
       - name: Try to install something
         run: |
-          sudo apt-get install -y neofetch
-          neofetch
-          ip address show
+          curl ifconfig.me/all
