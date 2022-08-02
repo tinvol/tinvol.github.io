@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Creepy Af text</title>
+
+        <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+
+		<script type="text/javascript" src="lunicode.js"></script>
+
+		<style type="text/css" media="screen">
+            :root {
+                --color: black;
+                --slider-color: white;
+                --slider-bg-color: black;
+            }
+
+			body {
+				font-family: Helvetica, Arial, sans-serif;
+                display: flex; justify-content: center; 
+                flex-wrap: wrap; margin: 1em; 
+                overflow: hidden;
+                background-color: #a4ccac;
+			}
+
+            #val {
+                height: 20px;
+                width: 60%;
+                -webkit-appearance: none;
+                background-color: var(--slider-bg-color);;
+                border-radius: 10px; 
+            }
+
+            #val::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 25px;
+                height: 25px;
+                border-radius: 50%; 
+                background: var(--slider-color);
+                cursor: pointer;
+                border: 2px solid;
+                border-color: var(--slider-bg-color);
+            }
+
+            .flex {
+                width: 100%; 
+                display: flex; 
+                justify-content: center;
+            }
+
+            .absolute {
+                position: absolute;
+            }
+
+            #credit {
+                left: 5px; 
+                bottom: 5px;
+            }
+
+            #credit-link {
+                color: var(--color);
+            }
+
+            #clr {
+                left: 5px;
+                top: 5px;
+            }
+
+            #selector-con {
+                margin: 1em;
+            }
+
+            #slival {
+                width: 3.5em;
+                margin: 2px;
+            }
+
+            #valsel {
+                margin-left: 1em;
+            }
+
+            #tx {
+                width: 70%;
+                border: 2px solid;
+                outline: none;
+            }
+
+            #out-con {
+                top:50%;
+                color: var(--slider-bg-color);
+            }
+		</style>	
+
+	</head>
+	<body id="bdy">
+		
+        <div id="credit" class="absolute">
+            <a href="https://github.com/combatwombat/Lunicode.js" id="credit-link">using lunicode.js</a>
+        </div>
+        
+        <h1 class="flex">Creepy Text</h1>
+		
+        <input type="color" id="clr" value="#a4ccac" class="absolute">
+
+        <div class="flex" id="selector-con">
+            <input id="val" type="range" step="50" value="100" min="0" max="1000" oninput="this.nextElementSibling.value = this.value">
+            <output id="slival" class="flex">100</output>
+
+            <select id="valsel">
+                <option value=100 >100</option>
+                <option value=1000 selected>1000</option>
+                <option value=5000 >5000</option>
+                <option value=10000 >10000</option>
+                <option value=20000 >20000</option>
+                <option value=50000 >50000</option>
+                <option value=100000 >100000</option>
+            </select>
+        </div>
+
+        <div class="flex">
+            <textarea rows="5" id="tx"></textarea>
+        </div>
+        
+		<div id="out-con" class="absolute">
+			<p id="out"></p>
+		</div>
+
+	</body>
+
+
+    <script>
+        function invertColor(hex) {
+            if (hex.indexOf('#') === 0) {
+                hex = hex.slice(1);
+            }
+            var r = parseInt(hex.slice(0, 2), 16),
+                g = parseInt(hex.slice(2, 4), 16),
+                b = parseInt(hex.slice(4, 6), 16);
+
+            return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? '#000000' : '#FFFFFF';
+        }
+
+        function sliderColor(hex) {
+            var c = hex.substring(1);      // strip #
+            var rgb = parseInt(c, 16);   // convert rrggbb to decimal
+            var r = (rgb >> 16) & 0xff;  // extract red
+            var g = (rgb >>  8) & 0xff;  // extract green
+            var b = (rgb >>  0) & 0xff;  // extract blue
+
+            var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+
+            if (luma < 30) {
+                return '#FFFFFF';
+            }
+            else{
+                return '#000000';
+            }
+        }
+
+        function inv(hex) {
+            return hex === '#FFFFFF' ? '#000000' : '#FFFFFF';
+        }
+
+        document.getElementById('clr').addEventListener('change', (e) => {
+            let body = document.getElementById('bdy').style,
+            val = e.target.value,
+            color = invertColor(val),
+            sliderBgCol = sliderColor(val),
+            sliderCol = inv(sliderBgCol),
+            doc = document.documentElement.style;
+
+            body.backgroundColor = val;
+            body.color = color;
+            doc.setProperty('--color', color);
+            doc.setProperty('--slider-bg-color', sliderBgCol);
+            doc.setProperty('--slider-color', sliderCol);
+            console.log(sliderCol);
+        });
+
+        document.getElementById('valsel').addEventListener('change', (e) => {
+            let sliderVal = document.getElementById('slival'),
+            slider = document.getElementById('val'),
+            value = e.target.value;
+
+            sliderVal.value = 100;
+            slider.value = 100;
+            slider.setAttribute("max", value);
+        });
+        
+
+        const luni = new Lunicode();
+
+        luni.tools.creepify.options.top = true; 	// add diacritics on top. Default: true 
+        luni.tools.creepify.options.middle = true;	// add diacritics in the middle. Default: true 
+        luni.tools.creepify.options.bottom = true;	// add diacritics on the bottom. Default: true
+        luni.tools.creepify.options.maxHeight = 100; // How many diacritic marks shall we put on top/bottom? Default: 15
+        luni.tools.creepify.options.randomization = 100; // 0-100%. maxHeight 100 and randomization 20%: the height goes from 80 to 100. randomization 70%, height goes from 30 to 100. Default: 100
+            
+        document.getElementById('tx').addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                luni.tools.creepify.options.maxHeight = document.getElementById('val').value;
+                let text = document.getElementById('tx').value;
+                let encodedText = luni.tools.creepify.encode(text);
+                document.getElementById('out').innerHTML = luni.getHTML(encodedText);
+            }
+        });
+    </script>
+</html>
