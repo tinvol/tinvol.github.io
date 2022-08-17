@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coinflip</title>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+        }
+
+        #coin { 
+            height: 10em;
+            width: 10em;
+            background-color: yellow;
+            border-radius: 100%;
+            transition: 1s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 6px solid;
+            
+        }
+
+        #txt {
+            font-size: 3em;
+            font-family: Arial, Helvetica, sans-serif;
+            user-select: none;
+        }
+
+        @keyframes head {
+            from {
+                transform: rotateY(0);
+            }
+            to {
+                transform: rotateY(720deg);
+            }
+        }
+        
+        .fhead {
+            animation: head 0.75s ease-out forwards;
+        }
+
+        #clr {
+            left: 5px;
+            top: 5px;
+            position: absolute;
+        }
+
+    </style>
+</head>
+<body>
+
+    <input type="color" id="clr" value="#ffff00">
+
+
+    <div id="coin" >
+        <div id="txt">
+        </div>
+    </div>
+
+</body>
+
+<script>
+    function rand(){
+        return Math.floor(Math.random() * 2) == 0 ? true : false;
+    }
+
+    let coin = document.getElementById('coin');
+    let txt = document.getElementById('txt');
+
+    coin.addEventListener("click", () => {
+        coin.classList.add('fhead');
+        
+    });
+
+    coin.addEventListener('animationend', () => {
+        coin.classList.remove('fhead');
+    });
+
+    coin.addEventListener('animationstart', () => {
+        txt.innerText = "";
+        setTimeout(() => {
+            txt.innerText = rand() ? "Zahl" : "Kopf";
+        }, 700);
+    });
+
+    document.getElementById('clr').addEventListener('change', (e) => {
+        coin.style.backgroundColor = e.target.value;
+    });
+
+</script>
+
+</html>
