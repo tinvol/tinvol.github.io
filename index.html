@@ -8,6 +8,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="favicon.svg">
     <title>Index</title>
+
+    <style>
+      body {
+        background-color: black;
+        color: white;
+      }
+
+      a {
+        color: white;
+      }
+
+      #clock {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 4.5em;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-right: 20px;
+      }
+
+      #date {
+        position: absolute;
+        top: 6.5em;
+        right: 10px;
+        font-size: 1em;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-right: 25px;
+      }
+
+      #place {
+        position: absolute;
+        top: 8em;
+        right: 10px;
+        font-size: 1em;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-right: 25px;
+      }
+
+      #temp {
+        position: absolute;
+        top: 9.5em;
+        right: 10px;
+        font-size: 1em;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-right: 25px;
+      }
+
+      #temp-graph {
+        position: absolute;
+        top: 11em;
+        right: 10px;
+        margin-right: 25px;
+      }
+
+      #emote {
+        position: absolute;
+        top: 14em;
+        right: 10px;
+        margin-right: 25px;
+      }
+
+    </style>
+
   </head>
   <body>
 
@@ -25,5 +88,137 @@
   
     <a href="./coinflip/coinflip.html">coinflip</a>
 
+
+    <div id="clock">
+    </div>
+
+    <div id="date">
+    </div>
+
+    <div id="place">
+    </div>
+
+    <div id="temp">
+    </div>
+
+    <div id="temp-graph">
+      <canvas id="can" width="150" height="50"> 
+      </canvas>
+    </div>
+
+    <div id="emote">
+
+    </div>
+
   </body>
+
+  <script>
+    function hideCursor() {
+      const el = document.documentElement;
+
+      el.addEventListener("mousemove", e => {
+        const timer = el.getAttribute("timer");
+        if (timer) {
+          clearTimeout(timer);
+          el.setAttribute("timer", "");
+        }
+        const t = setTimeout(() => {
+          el.setAttribute("timer", "");
+          el.style.cursor = "none";
+        }, 3500);
+        el.setAttribute("timer", t);
+        el.style.cursor = "auto";
+      });
+    }
+
+    function getDate() {
+      let dt = new Date(),
+      d = dt.getDate(),
+      mon = dt.getMonth()+1,
+      j = String(dt.getFullYear()).slice(-2),
+      h = dt.getHours(),
+      min = dt.getMinutes() < 10 ? '0'+dt.getMinutes() : dt.getMinutes(); 
+
+      document.getElementById('clock').innerText = h + ":" + min;
+      document.getElementById('date').innerText = d + "." + mon + "." + j;
+    }
+    
+    getDate();
+    setInterval(getDate, 1000);
+
+    function getIcon(icon) {
+      switch(icon){
+          case 'cloudy':
+            return '☁';
+          case 'partly-cloudy-day':
+            return '🌥';
+          case 'clear-day':
+            return '☀';
+          case 'partly-cloudy-night"':
+            return '🌥';
+          case 'clear-night':
+            return '🌑';
+          case 'rain':
+            return '🌧';
+          default:
+            return '❌';
+        }
+    }
+
+    function getWeather() {
+      let dt = new Date(),
+      d = dt.getDate() < 10 ? '0'+dt.getDate() : dt.getDate(),
+      mon = dt.getMonth()+1 < 10 ? '0'+dt.getMonth() : dt.getMonth(),
+      j = dt.getFullYear(),
+      h = dt.getHours(),
+      url_date = j + "-" + mon + "-" + d;
+
+      const lat = 48.69122,
+      lon = 10.16650;
+
+      fetch('https://api.brightsky.dev/weather?lat=' + lat + '&lon=' + lon + '&date=' + url_date)
+      .then((res) => res.json())
+      .then((data) => {
+
+        document.getElementById('emote').innerText = getIcon(data.weather[h].icon);
+
+        let place = data.sources[0].station_name,
+        temp = data.weather[h].temperature;
+
+        document.getElementById('place').innerText = place;
+        document.getElementById('temp').innerText = temp + " °C";
+
+        let arr = [];
+        data.weather.forEach(element => {
+          arr.push(element.temperature);
+        });
+
+        let canvas = document.getElementById('can'),
+        context = canvas.getContext('2d');  
+
+        const canW = canvas.offsetWidth,
+        canH = canvas.offsetHeight,
+        step = canW/arr.length;
+
+        context.clearRect(0, 0, canW, canH);
+        context.strokeStyle = 'red';
+
+        for(let i=0; i<arr.length; i++){
+          if(h == i){
+            context.strokeStyle = 'white';
+          }
+          context.beginPath();  
+          context.moveTo(step*i, canH-arr[i]);  
+          context.lineTo(step*(i+1), canH-arr[i+1]);  
+          context.stroke();  
+        }
+           
+      });
+    }
+
+    getWeather();
+    setInterval(getWeather, 1000*60*30);
+    hideCursor();
+    
+  </script>
 </html>
