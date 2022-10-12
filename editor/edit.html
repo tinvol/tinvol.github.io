@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>editor</title>
+        <link rel="icon" type="image/x-icon" href="favicon.svg">
+        <link rel="stylesheet" data-name="vs/editor/editor.main" href="vs/editor/editor.main.css">
+        <link rel="stylesheet" href="editorStyle.css">
+
+    </head>
+
+    <body>
+        <div id="lang">
+            <select name="langs" id="langs">
+            </select>
+        </div>
+
+        <div id="dl">
+            <button>
+                download
+            </button>
+        </div>
+
+        <div id="title">
+            editor
+        </div>
+
+        <div id="monaco_editor">
+        </div>
+
+        <script>
+            let require = { paths: { 'vs': 'vs' } };
+        </script>
+
+        <script src="vs/loader.js"></script>
+        <script src="vs/editor/editor.main.nls.js"></script>
+        <script src="vs/editor/editor.main.js"></script>
+
+        <div id="footer">
+            <div>
+                made using <a href="https://github.com/microsoft/monaco-editor"> monaco</a>
+            </div> 
+        </div>
+
+    </body>
+
+    <script>
+        let h_div = document.getElementById('monaco_editor'),
+        editor = monaco.editor.create(h_div, {
+            value: '',
+            language: 'plaintext',
+            theme: 'vs-dark',
+            scrollbar: {
+                vertical: 'auto',
+                horizontal: 'auto'
+            }
+        }),
+        langEl = document.getElementById('langs'),
+        model = editor.getModel(),
+        avLangs = editor.getModel()._languageService.languageIdCodec._languageIdToLanguage;
+
+        langEl.addEventListener("change", () => {
+            monaco.editor.setModelLanguage(model, langEl.value);
+        });
+
+        avLangs.forEach(lang => {
+            if(!lang.includes('.')){
+                langEl.innerHTML += '<option value="' + lang + '">' + lang + '</option>';
+            }       
+        });
+
+        function download() {
+            let text = editor.getValue(),
+            dLink = document.createElement('a');
+            dLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            dLink.download = 'code' + '.txt';
+            document.body.appendChild(dLink);
+            dLink.click();
+            document.body.removeChild(dLink);
+        }
+
+        document.getElementById('dl').addEventListener('click', () => {
+            download();
+        })
+
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                download();
+            }
+        });
+    </script>
+
+</html>

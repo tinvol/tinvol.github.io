@@ -30,7 +30,7 @@
 
       #date {
         position: absolute;
-        top: 6.5em;
+        top: 8em;
         right: 10px;
         font-size: 1em;
         font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -39,7 +39,7 @@
 
       #place {
         position: absolute;
-        top: 8em;
+        top: 6.5em;
         right: 10px;
         font-size: 1em;
         font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -69,6 +69,31 @@
         margin-right: 25px;
       }
 
+      #battery-charge {
+        position: absolute;
+        bottom: 2em;
+        right: 10px;
+        margin-right: 25px;
+        rotate: -90deg;
+      }
+
+      #battery-charge-tooltip {
+        position: absolute;
+        bottom: 2em;
+        right: 10px;
+        margin-right: 25px;
+        height: 20px;
+        width: 20px;
+        z-index: 1;
+      }
+
+      #battery-emote {
+        position: absolute;
+        bottom: 2em;
+        right: calc(10px + 2em);
+        margin-right: 25px;
+      }
+
     </style>
 
   </head>
@@ -88,14 +113,18 @@
   
     <a href="./coinflip/coinflip.html">coinflip</a>
 
+    <br>
+  
+    <a href="./editor/edit.html">editor</a>
+
 
     <div id="clock">
     </div>
 
-    <div id="date">
+    <div id="place">
     </div>
 
-    <div id="place">
+    <div id="date">
     </div>
 
     <div id="temp">
@@ -107,12 +136,24 @@
     </div>
 
     <div id="emote">
+    </div>
 
+    <canvas id="battery-charge" width="20" height="20"> 
+    </canvas>
+
+    <div id="battery-charge-tooltip" title="This is my tooltip">
+    </div>
+
+    <div id="battery-emote">
     </div>
 
   </body>
 
   <script>
+    //default
+    let lat = 48.69122,
+    lon = 10.16650;
+
     function hideCursor() {
       const el = document.documentElement;
 
@@ -142,24 +183,21 @@
       document.getElementById('clock').innerText = h + ":" + min;
       document.getElementById('date').innerText = d + "." + mon + "." + j;
     }
-    
-    getDate();
-    setInterval(getDate, 1000);
 
     function getIcon(icon) {
       switch(icon){
           case 'cloudy':
-            return '☁';
+            return '☁️';
           case 'partly-cloudy-day':
-            return '🌥';
+            return '🌥️';
           case 'clear-day':
-            return '☀';
-          case 'partly-cloudy-night"':
-            return '🌥';
+            return '☀️';
+          case 'partly-cloudy-night':
+            return '🌥️';
           case 'clear-night':
             return '🌑';
           case 'rain':
-            return '🌧';
+            return '🌧️';
           default:
             return '❌';
         }
@@ -172,9 +210,6 @@
       j = dt.getFullYear(),
       h = dt.getHours(),
       url_date = j + "-" + mon + "-" + d;
-
-      const lat = 48.69122,
-      lon = 10.16650;
 
       fetch('https://api.brightsky.dev/weather?lat=' + lat + '&lon=' + lon + '&date=' + url_date)
       .then((res) => res.json())
@@ -212,13 +247,60 @@
           context.lineTo(step*(i+1), canH-arr[i+1]);  
           context.stroke();  
         }
-           
+        
+        getDate();
       });
     }
 
-    getWeather();
-    setInterval(getWeather, 1000*60*30);
-    hideCursor();
+    function getBattery() {
+      navigator.getBattery().then((battery) => {
+        let chrg = battery.charging,
+        lvl = battery.level;
+        
+        document.getElementById('battery-emote').innerText = chrg ? "⚡" : "";
+        document.getElementById('battery-charge-tooltip').title = lvl*100 + '%';
+
+        let canvas = document.getElementById('battery-charge'),
+        context = canvas.getContext('2d');
+
+        const canW = canvas.offsetWidth,
+        canH = canvas.offsetHeight,
+        radius = canW/2-2;
+        x = canH/2,
+        y = canH/2,
+        percent = 70;
+
+        context.strokeStyle = chrg ? 'white' : 'red';
+        context.lineWidth = 1;
+        context.clearRect(0, 0, canW, canH);
+        context.beginPath();
+        context.moveTo(x + radius, y);
+        context.arc(x, y, radius, 0, 2 * Math.PI * lvl);
+        context.stroke();
+
+        if(lvl > 1.0) {
+          context.strokeStyle = '#696969';
+          context.beginPath();
+          context.arc(x, y, radius, 2 * Math.PI * lvl, 2 * Math.PI);
+          context.stroke();
+        }
+      });
+    }
     
+    function locate() {
+      fetch('https://ipapi.co/json/')
+      .then((res) => res.json())
+      .then((data) => {
+        lat = data.latitude;
+        lon = data.longitude;
+        getWeather();
+      })
+    }
+
+    locate();
+    hideCursor();
+    setInterval(getDate, 1000);
+    setInterval(getBattery, 1000);
+    setInterval(getWeather, 1000*60*30);
   </script>
 </html>

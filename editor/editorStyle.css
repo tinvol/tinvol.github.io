@@ -1,0 +1,49 @@
+body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color: rgb(13, 99, 99);
+    color: wheat;
+}
+
+a {
+    color: wheat;
+}
+
+#lang {
+    position: absolute;
+    top: 2em;
+    left: 2em;
+}
+
+#dl {
+    position: absolute;
+    top: 2em;
+    right: 2em;
+}
+
+#title {
+    height: 10vh;
+    width: 100%;
+    font-size: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#monaco_editor {
+    height: 85vh;
+    width: calc(100vw - 2em);
+}
+
+#footer {
+    height: 5vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
