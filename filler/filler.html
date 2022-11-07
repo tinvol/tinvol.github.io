@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filler</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
+            background-color: blueviolet;
+            overflow-x: hidden;
+        }
+
+        #selector {
+            width: 100%;
+            height: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        #output {
+            display: flex;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        td {
+            border:1px solid black;
+            text-align: center;
+        }
+
+        input {
+            margin: 1rem;
+        }
+    </style>
+
+    
+</head>
+<body>
+
+    <div id="selector">
+        <input type="number" id="width" min="1" max="20">
+        <input type="number" id="height" min="1" max="20">
+        <input type="button" id="sel" value="Ok">
+    </div>
+
+    <div id="output">
+    </div>
+    
+</body>
+
+<script>
+    const max = 20,
+    select = document.getElementById("sel");
+
+    select.addEventListener("click", () => {
+        
+        let w = document.getElementById("width").value,
+        h = document.getElementById("height").value;
+        
+        if(w > 0 && h > 0 && w <= max && h <= max) {
+            document.getElementById("output").innerHTML = "";
+
+            const tbl = document.createElement("table");
+            const tblBody = document.createElement("tbody");
+            let number = h*w,
+            arr = [];
+
+            for(let x=1; x <= number; x++){
+                arr[x-1] = x;
+            }
+            
+            for (let i = 0; i < h; i++) {
+                const row = document.createElement("tr");
+
+                for (let j = 0; j < w; j++) {
+                    const cell = document.createElement("td");
+                    let randomNumber = getRanNum(number);
+                    let random = -1;
+
+                    while(arr[randomNumber] == 0){
+                        randomNumber = getRanNum(number);
+                    }
+                    
+                    random = arr[randomNumber];
+                    arr[randomNumber] = 0;
+                    
+                    const cellText = document.createTextNode(random);
+                    cell.appendChild(cellText);
+                    row.appendChild(cell);
+                }
+
+                tblBody.appendChild(row);
+            }
+
+            tbl.appendChild(tblBody);
+            document.getElementById("output").appendChild(tbl);
+        }
+    });
+
+    function getRanNum(number) {
+        return Math.floor(Math.random() * (number-1 - 0 + 1) + 0);
+    }
+
+</script>
+</html>

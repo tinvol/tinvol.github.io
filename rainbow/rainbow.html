@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+    <title>nahhh</title>
+
+    <style>
+        body {
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        #rnbw {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 1rem;
+            background: linear-gradient(90deg, rgba(0,254,255,1) 0%, rgba(59,82,254,1) 25%, rgba(227,40,255,1) 50%, rgba(255,179,14,1) 75%, rgba(249,255,0,1) 100%);
+        }
+
+        #txt {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            color: white;
+            font-size: 7.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation-name: spin;
+            animation-timing-function: pulsate;
+            animation-iteration-count: infinite;
+            animation-duration: 1.5s;
+            filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.4));
+        }
+
+        @keyframes spin {
+            from { 
+                transform: rotateY(0deg); 
+            }
+            to { 
+                transform: rotateY(-360deg); 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="rnbw">
+       
+    </div>
+
+    <div id="txt">
+        💎
+    </div>
+    
+</body>
+</html>
