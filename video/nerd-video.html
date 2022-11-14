@@ -15,14 +15,80 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            background-color: black;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #overlay {
+            display: none;
+            height: 50%;
+            width: 50%;
+            position: absolute;
+            rotate: 90deg;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 5rem;
+            cursor: pointer;
+        }
+
+        @media (orientation: portrait) {
+            #vid {
+                width: 100%;
+            }
+
         }
     </style>
 </head>
 <body> 
 
-<video width="50%" autoplay="autoplay" loop style="pointer-events: none;">
+    
+<video width="50%" autoplay="autoplay" loop style="pointer-events: none;" id="vid">
   <source src="nerd-video.mp4" type="video/mp4">
 </video>
 
+<div id="overlay">
+    🔺
+</div>
+
 </body> 
+
+<script> 
+    var vid = document.getElementById("vid"); 
+    vid.play(); 
+
+    const delay = millis => new Promise((resolve, reject) => {
+        setTimeout(_ => resolve(), millis)
+    });
+
+    if(vid.paused){
+        console.log("paused");
+        let overlay = document.getElementById("overlay");
+        overlay.style.display = "flex";
+
+        overlay.addEventListener("click", () => {
+            vid.play(); 
+            overlay.style.display = "none";
+        });
+
+        hueRot(overlay, 0);
+    }
+
+
+
+    async function hueRot(element, i) {
+        if(i > 359) {
+            i = 0;
+        }
+        element.style.filter = "hue-rotate("+i+"deg)";
+        i++;
+
+        await delay(5);
+        hueRot(element, i);
+    }
+
+    
+</script> 
+
 </html>

@@ -12,7 +12,7 @@
             margin: 0;
             height: 100vh;
             width: 100vw;
-            background-color: blueviolet;
+            background-color: rgb(149 92 202);
             overflow-x: hidden;
         }
 
@@ -55,11 +55,26 @@
 </body>
 
 <script>
-    const max = 20,
-    select = document.getElementById("sel");
 
-    select.addEventListener("click", () => {
+    const max = 20;
 
+    document.addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+            generateOutput();
+        }
+    });
+
+    
+    document.getElementById("sel").addEventListener("click", () => {
+        generateOutput();
+    });
+
+    function getRanNum(number) {
+        return Math.floor(Math.random() * (number-1 - 0 + 1) + 0);
+    }
+
+    function generateOutput() {
+        
         let w = document.getElementById("width").value,
         h = document.getElementById("height").value;
         
@@ -101,10 +116,6 @@
             tbl.appendChild(tblBody);
             document.getElementById("output").appendChild(tbl);
         }
-    });
-
-    function getRanNum(number) {
-        return Math.floor(Math.random() * (number-1 - 0 + 1) + 0);
     }
 
 </script>
