@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.svg">
+    <title>ape?!</title>
+
+    <style>
+        body {
+            background-color: rgb(135, 92, 36);
+            margin: 0;
+            overflow: hidden;
+            font-family: sans-serif;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .button {
+            background-color: rgb(240, 148, 19);
+            padding: 1rem;
+            margin: 1rem;
+            cursor: pointer;
+            border-radius: 10rem;
+            padding: 1.2rem;
+            transition: 0.5s ease;
+            opacity: 0;
+            transform: translateY(5rem);
+            min-width: 4rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .display {
+            display: none;
+        }
+
+        #btn-con {
+            flex-wrap: wrap;
+        }
+
+        #text-con {
+            margin-bottom: 5rem;
+        }
+
+        #text {
+            font-size: 3rem;
+            transition: 0.5s ease;
+            opacity: 1;
+            text-align: center;
+        }
+
+        #testout {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        #testin {
+            position: absolute;
+            top: 10px;
+            left: 50px;
+        }
+
+    </style>
+</head>
+<body class="flex-center">
+
+    <div id="frame">
+
+        <div class="flex-center" id="text-con">
+            <div id="text">are you an ape? 🙉</div>
+        </div>
+
+        <div class="flex-center" id="btn-con">
+            <div id="0" class="button">
+            </div>
+
+            <div id="1" class="button">
+            </div>
+
+            <div id="2" class="button">
+            </div>
+
+            <div id="3" class="button">
+            </div>
+
+            <div id="4" class="button">
+            </div>
+        </div>
+
+    </div>
+    
+    <script>
+
+        const time = 1000;
+
+        let question = 0,
+        points = 0,
+        btnCon = document.getElementById("btn-con");
+
+        btnCon.childNodes.forEach(element => {
+            if(element.nodeType != Node.TEXT_NODE){
+                element.addEventListener("click", (event) => {
+                    fadeButtonsOut()
+                    fadeTextOut()
+                    clickedButton(event.target.id, event.target.innerText);
+                });
+            }
+        });
+
+        function fadeButtonsOut() {
+            btnCon.childNodes.forEach(element => {
+                if(element.nodeType != Node.TEXT_NODE){
+                    element.style.transform = "translateY(5rem)";
+                    element.style.opacity = "0";
+                }
+            });
+        }
+
+        function fadeButtonsIn(txt = [], firstLoad = false) {
+            let i = 0;
+            btnCon.childNodes.forEach(element => {
+                if(element.nodeType != Node.TEXT_NODE){
+                    if(typeof txt[i] != 'undefined'){
+                        element.innerText = txt[i];
+                        element.classList.remove("display");
+                        if(firstLoad){
+                            element.style.transform = "translateY(0rem)";
+                            element.style.opacity = "1";
+                        }
+                        else {
+                            setTimeout(() => {
+                                element.style.transform = "translateY(0rem)";
+                                element.style.opacity = "1";
+                            }, 1);
+                        }
+                    }
+                    else {
+                        element.innerText = "undefined";
+                        element.classList.add("display");
+                    }
+
+                    i++;
+                }
+            });
+        }
+
+        let text = document.getElementById("text");
+        function fadeTextOut() {
+            text.style.transform = "translateY(-5rem)";
+            text.style.opacity = "0";
+        }
+
+        function fadeTextIn(txt) {
+            text.innerText = txt;
+            text.style.transform = "translateY(0rem)";
+            text.style.opacity = "1";
+        }
+
+        function clickedButton(id, text) {
+            
+            if(text.includes("again")){
+                location.reload();
+            }  
+            else if(text.includes("gg")){
+                window.location.href = 'https://www.youtube.com/embed/tiNllatfTjI';
+            }
+            else{
+                fetch("ape.json")
+                .then(response => response.json())
+                .then(json => {
+                    if(question > 0) {
+                        points += Number(json.questions[question-1].answers[id].value);
+                    }
+
+                    let questLen = json.questions.length;
+                    if(question >= questLen){
+                        if(points > Math.floor(questLen/2)){
+                            setTimeout(() => {
+                                fadeTextIn("you are no ape!");
+                                fadeButtonsIn(["gg lil bro"]);
+                            }, time);
+                        }
+                        else {
+                            setTimeout(() => {
+                                fadeTextIn("you ape 🐒");
+                                fadeButtonsIn(["try again"]);
+                            }, time);
+                        }
+                        
+                    }
+                    else{
+                        setTimeout(() => {
+                            fadeTextIn(json.questions[question].text);
+                            let ans = [];
+                            json.questions[question].answers.forEach(element => {
+                                ans.push(element.answer);
+                            });
+                            fadeButtonsIn(ans);
+
+                            question++;
+                        }, time);
+                    }
+                    
+                });
+            }        
+
+        }
+
+        fadeButtonsOut();
+        fadeButtonsIn(["find out"], true);
+
+        
+
+    </script>
+</body>
+</html>

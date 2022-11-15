@@ -1,0 +1,77 @@
+{
+    "questions": [
+        {
+            "text": "do you get up after 10 am?",
+            "answers": [
+                {
+                    "answer": "yes",
+                    "value": 0
+                },
+                {
+                    "answer": "no",
+                    "value": 1
+                },
+                {
+                    "answer": "monke",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "text": "are you mr big L?",
+            "answers": [
+                {
+                    "answer": "yes",
+                    "value": 0
+                },
+                {
+                    "answer": "no",
+                    "value": 1
+                },
+                {
+                    "answer": "mein name ist n. l.",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "text": "do you say pepe sadge?",
+            "answers": [
+                {
+                    "answer": "yes",
+                    "value": 0
+                },
+                {
+                    "answer": "no",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "text": "did you get exposed by simon?",
+            "answers": [
+                {
+                    "answer": "yes",
+                    "value": 0
+                },
+                {
+                    "answer": "no",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "text": "do you like 🍌?",
+            "answers": [
+                {
+                    "answer": "yes",
+                    "value": 0
+                },
+                {
+                    "answer": "no",
+                    "value": 1
+                }
+            ]
+        }
+    ]
+}
