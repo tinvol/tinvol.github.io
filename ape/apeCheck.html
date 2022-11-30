@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl-PL">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -69,10 +69,20 @@
             left: 50px;
         }
 
+        #speak {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
     </style>
 </head>
 <body class="flex-center">
 
+    <!--
+    <button id="speak" onclick="speak('hell nah lil bro');">speak</button>
+    -->
+   
     <div id="frame">
 
         <div class="flex-center" id="text-con">
@@ -185,20 +195,21 @@
                     if(question >= questLen){
                         if(points > Math.floor(questLen/2)){
                             setTimeout(() => {
-                                fadeTextIn("you are no ape!");
-                                fadeButtonsIn(["gg lil bro"]);
+                                fadeTextIn(json.end.noape.text);
+                                fadeButtonsIn([json.end.noape.button]);
                             }, time);
                         }
                         else {
                             setTimeout(() => {
-                                fadeTextIn("you ape 🐒");
-                                fadeButtonsIn(["try again"]);
+                                fadeTextIn(json.end.ape.text);
+                                fadeButtonsIn([json.end.ape.button]);
                             }, time);
                         }
                         
                     }
                     else{
                         setTimeout(() => {
+                            //speak(json.questions[question].text);
                             fadeTextIn(json.questions[question].text);
                             let ans = [];
                             json.questions[question].answers.forEach(element => {
@@ -218,8 +229,25 @@
         fadeButtonsOut();
         fadeButtonsIn(["find out"], true);
 
-        
+        function speak(msg) {
 
+            let utter = new SpeechSynthesisUtterance();
+
+            utter.lang = 'en-US';
+            utter.text = msg;
+            utter.volume = 1;
+            utter.pitch = 10;
+            utter.rate = 0.5;
+
+            speechSynthesis.speak(utter);
+        }
+
+        window.speechSynthesis.onvoiceschanged = () => {
+            
+            voices = window.speechSynthesis.getVoices();
+            console.log(voices);
+            
+        }
     </script>
 </body>
 </html>
