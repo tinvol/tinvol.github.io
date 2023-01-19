@@ -67,6 +67,8 @@
         top: 14em;
         right: 10px;
         margin-right: 25px;
+        cursor: pointer;
+        user-select: none;
       }
 
       #sun {
@@ -79,12 +81,9 @@
         overflow: hidden;
       }
 
-      #sun-tooltip {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
+      #sun-emote {
+        cursor: pointer;
+        user-select: none;
       }
 
       #battery-charge {
@@ -151,6 +150,10 @@
   
     <a href="./cracker/cracker.html">cracker</a>
 
+    <br>
+
+    <a href="./tts/tts.html">cracker</a>
+
 
     <div id="clock">
     </div>
@@ -177,8 +180,6 @@
 
       </div>
 
-      <div id="sun-tooltip" title="This is my tooltip">
-      </div>
     </div>
 
     <canvas id="battery-charge" width="20" height="20"> 
@@ -228,6 +229,7 @@
     }
 
     function getIcon(icon) {
+      console.log(icon);
       switch(icon){
           case 'cloudy':
             return '☁️';
@@ -241,6 +243,8 @@
             return '🌑';
           case 'rain':
             return '🌧️';
+          case 'snow':
+            return '❄️';
           default:
             return '❌';
         }
@@ -260,7 +264,21 @@
       .then((res) => res.json())
       .then((data) => {
 
-        document.getElementById('emote').innerText = getIcon(data.weather[h].icon);
+        let emote = document.getElementById('emote'),
+        icon = data.weather[h].icon,
+        emoteEmoji = getIcon(icon);
+
+        emote.innerText = emoteEmoji;
+        emote.addEventListener("click", (e) => {
+            if(e.target.innerText.length > 5){
+              e.target.innerText = emoteEmoji;
+            }
+            else {
+              e.target.innerText += " "+icon;
+            }
+
+            
+        });
 
         let place = data.sources[0].station_name,
         temp = data.weather[h].temperature;
@@ -272,6 +290,21 @@
         data.weather.forEach(element => {
           arr.push(element.temperature);
         });
+
+        let minus = false;
+        
+        for(let l=0; l<arr.length; l++){
+          if(arr[l] < 0){
+            minus = true;
+            break;
+          }
+        }
+
+        if(minus){
+          for(let k=0; k<arr.length; k++){
+            arr[k] += 25;
+          }
+        }
 
         let canvas = document.getElementById('can'),
         context = canvas.getContext('2d');  
@@ -477,11 +510,32 @@
   function sunEvents(lat, long) {
     
     let now = new Date(),
-    events = solar_events(now, lat, long);
-    
-    document.getElementById("sun-emote").innerText = (events.sunset > now) ? "🌅" : "🌗";
-    document.getElementById('sun-tooltip').title = " Aufgang: "+events.sunrise.time() + " Untergang: "+events.sunset.time();
+    events = solar_events(now, lat, long),
+    sunriseSplit = events.sunrise.time().split(":"),
+    sunsetSplit = events.sunset.time().split(":"),
+    sunset = sunsetSplit[0] + ":" + sunsetSplit[1],
+    sunrise = sunriseSplit[0] + ":" + sunriseSplit[1];
 
+    if(Number(sunriseSplit[1]) < 10){
+      sunrise = sunriseSplit[0] + ":0" + sunriseSplit[1];
+    } 
+
+    if(Number(sunsetSplit[1]) < 10){
+      sunset = sunsetSplit[0] + ":0" + sunsetSplit[1];  
+    } 
+
+    document.getElementById("sun-emote").innerText = (events.sunset > now) ? "🌅" : "🌗";
+    document.getElementById("sun-emote").addEventListener("click", (e)=> {
+      if(e.target.innerText.length < 10){
+        
+        e.target.innerText += " ▲ " + sunrise + "  ▼ " + sunset;
+      }
+      else{
+        e.target.innerText = (events.sunset > now) ? "🌅" : "🌗";
+      }
+      
+    });
+  
   } 
 
   locate();

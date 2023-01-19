@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.svg">
+    <title>speak</title>
+
+    <style>
+
+        body {
+            background-color: rgb(25, 104, 136);
+            margin: 1rem;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+    </style>
+</head>
+<body class="flex-center">
+
+    <input type="text" id="text" name="text">
+    <button id="speak">speak</button>
+    
+    <script>
+
+        const btn = document.getElementById("speak"),
+        inpt = document.getElementById("text");
+
+        btn.addEventListener('click', () => {
+            speak(inpt.value);
+        });
+
+        function speak(msg) {
+
+            let utter = new SpeechSynthesisUtterance();
+
+            utter.lang = 'en-US';
+            utter.text = msg;
+            utter.volume = 1;
+            utter.pitch = 10;
+            utter.rate = 0.5;
+
+            speechSynthesis.speak(utter);
+        }
+
+    </script>
+</body>
+</html>

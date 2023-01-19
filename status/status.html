@@ -5,8 +5,242 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Status</title>
+
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            color: white;
+        }
+
+        #txt {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        #status {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+
+        #graph-con {
+            background-color: rebeccapurple;
+            border-radius: 1rem;
+            width: 90vw;
+            height: 70vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        #graph {
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-wrap: wrap;
+
+        }
+
+    </style>
 </head>
+
 <body>
-    Test
+
+    <div id="con">
+        <div id="txt">
+            Aktueller Status:
+        </div>
+
+        <div id="status">
+        </div>
+
+        <div id="graph-con">
+            <div id="graph">
+            </div>
+        </div>
+       
+    </div>
+
+
 </body>
+
+<script>
+
+    let now = new Date();
+    
+
+    const response = fetch('data.csv')
+    .then(response => response.text())
+    .then((data) => {
+
+        let array = parseCSV(data),
+        status = getStatus(array),
+        text = "";
+
+        switch(status) {
+            case "online":
+                text += "🟢";
+                break;
+            case "abwesend":
+                text += "🟡";
+                break;
+            case "gespraech":
+                text += "🔴";
+                break;
+            default:
+                text += "⚫";
+                break;
+        }
+
+        document.getElementById("status").innerText = text + " " +status;
+
+        for(let i=0; i<24; i++){
+
+            const newDiv = document.createElement("div");
+            const newDivInner = document.createElement("div");
+            newDiv.style.height = "4rem";
+            newDiv.style.width = 100/6+"%";
+            newDiv.innerText = i;
+            newDivInner.style.height = "2.5rem";
+            newDivInner.style.width = "100%";
+
+            let thisHour = [];
+           
+            array.forEach((el) => {
+                let dt = new Date(el[1] * 1000);
+                if(dt.getHours() == i){
+                    thisHour.push(el);
+                }
+                else {
+                    newDivInner.style.boxShadow = "rgb(24 26 27 / 50%) 0px 0px 2000px inset";
+                }
+                
+            });
+
+            let str = "linear-gradient(90deg, ";
+
+            if(thisHour.length > 0) {
+                
+                //get first
+                let dateThis = new Date(thisHour[0][1] * 1000);
+                let prevElement = false;
+                if(dateThis.getMinutes() > 0 && i > 0){
+                    let prevEl = null;
+                    array.forEach((el) => {
+                        if(new Date(el[1] * 1000).getHours() == i-1){
+                            prevEl = el;
+                            
+                            prevElement = true;
+                        }
+                    });
+
+                    if(prevEl == null){
+                        str += "rgba(95,96,84,0.1) 0%,";
+                    }
+                    else{
+                        str += getColor(prevEl[0])+" 0%,";
+                    }
+                    
+                }
+
+                
+                for(let k=0; k<thisHour.length; k++) {
+                    let dt = new Date(thisHour[k][1] * 1000);
+                    let min = dt.getMinutes() * (100/60);
+                    
+                    if(k < thisHour.length-1){
+                        if(k-1 >= 0){
+                            str += getColor(thisHour[k-1][0])+" "+min+"%, ";
+                        }
+                        str += getColor(thisHour[k][0])+" "+min+"%, ";
+                    }
+                    else{
+                        if(min == 100){
+                            str += getColor(thisHour[k][0])+" "+min+"%)";
+                        }
+                        else{
+                            str += getColor(thisHour[k][0])+" "+min+"%, ";
+                            let nextExists = false;
+                            array.forEach((el) => {
+                                if(new Date(el[1] * 1000).getHours() == i+1 && !nextExists){
+                                    str += getColor(el[0])+" 100%)";
+                                    nextExists = true;
+                                }
+                            });
+
+                            if(!nextExists){
+                                str += "rgba(95,96,84,0.1) 100%)";
+                            }
+                        }
+                        
+                    }
+                    
+                    
+
+                }
+                console.log(str);
+                
+                newDivInner.style.background = str;
+            }
+
+            newDiv.appendChild(newDivInner);
+            document.getElementById("graph").appendChild(newDiv);
+        }
+
+    });
+
+    function getStatus(arr) {
+        return arr[arr.length-1][0];
+    }
+
+    function getColor(status) {
+        switch(status){
+            case "gespraech":
+                return "rgba(255,0,0,0.8)";
+            case "online":
+                return "rgba(0,255,0,0.8)";
+            case "abwesend":
+                return "rgba(226,255,0,0.8)";
+            default:
+                return "rgba(95,96,84,0.8)";      
+        }
+    }
+
+    function parseCSV(str) {
+    var arr = [];
+    var quote = false;  
+    
+    for (var row = 0, col = 0, c = 0; c < str.length; c++) {
+        var cc = str[c], nc = str[c+1];       
+        arr[row] = arr[row] || [];         
+        arr[row][col] = arr[row][col] || '';  
+
+        if (cc == '"' && quote && nc == '"') { arr[row][col] += cc; ++c; continue; }
+        if (cc == '"') { quote = !quote; continue; }
+        if (cc == ',' && !quote) { ++col; continue; }
+        if (cc == '\r' && nc == '\n' && !quote) { ++row; col = 0; ++c; continue; }
+        if (cc == '\n' && !quote) { ++row; col = 0; continue; }
+        if (cc == '\r' && !quote) { ++row; col = 0; continue; }
+
+        arr[row][col] += cc;
+    }
+    return arr;
+}
+</script>
 </html>
