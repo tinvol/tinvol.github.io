@@ -1,0 +1,79 @@
+@font-face {
+    font-family: NikeFont;
+    src: url("FuturaBQ-ExtraBoldOblique.otf") format("opentype");
+}
+
+body {
+    background-color: black;
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#face {
+    height: 70vh;
+    width: 70vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    border-radius: 11.5rem;
+    box-shadow: 0 0 25px #ffffff;
+    font-family: NikeFont;
+    font-size: 11.5rem;
+    font-variant-numeric: tabular-nums;
+    font-stretch: ultra-condensed;
+    font-style: italic;
+    position: relative;
+
+}
+
+#hour, #min {
+    width: 100%;
+    text-align: center;
+}
+
+#hour {
+    transform: scaleY(1.4) translateY(10%);
+}
+
+#min {
+    transform: scaleY(1.4) translateY(-10%);
+}
+
+#color {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+}
+
+#ring {
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    position: absolute;
+    border-radius: 11.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: purple;
+}
+
+#ringInner {
+    z-index: 50;
+    height: 95%;
+    width: 95%;
+    border-radius: 11rem;
+    background-color: gray;
+} 
+
+@media (orientation: portrait) {
+    #face {
+        height: 80vw;
+        width: 80vw;
+        font-size: 20vw;
+    }
+  }
