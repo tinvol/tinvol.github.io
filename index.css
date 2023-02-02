@@ -1,0 +1,100 @@
+body {
+    background-color: black;
+    color: white;
+  }
+
+  a {
+    color: white;
+  }
+
+  #clock {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 4.5em;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-right: 20px;
+  }
+
+  #date {
+    position: absolute;
+    top: 8em;
+    right: 10px;
+    font-size: 1em;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-right: 25px;
+  }
+
+  #place {
+    position: absolute;
+    top: 6.5em;
+    right: 10px;
+    font-size: 1em;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-right: 25px;
+  }
+
+  #temp {
+    position: absolute;
+    top: 9.5em;
+    right: 10px;
+    font-size: 1em;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-right: 25px;
+  }
+
+  #temp-graph {
+    position: absolute;
+    top: 11em;
+    right: 10px;
+    margin-right: 25px;
+  }
+
+  #emote {
+    position: absolute;
+    top: 14em;
+    right: 10px;
+    margin-right: 25px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  #sun {
+    position: absolute;
+    top: 16em;
+    right: 10px;
+    margin-right: 25px;
+    transition: 1s ease;
+    display: flex;
+    overflow: hidden;
+  }
+
+  #sun-emote {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  #battery-charge {
+    position: absolute;
+    bottom: 2em;
+    right: 10px;
+    margin-right: 25px;
+    rotate: -90deg;
+  }
+
+  #battery-charge-tooltip {
+    position: absolute;
+    bottom: 2em;
+    right: 10px;
+    margin-right: 25px;
+    height: 20px;
+    width: 20px;
+    z-index: 1;
+  }
+
+  #battery-emote {
+    position: absolute;
+    bottom: 2em;
+    right: calc(10px + 2em);
+    margin-right: 25px;
+  }
