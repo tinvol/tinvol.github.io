@@ -57,11 +57,12 @@
  function getWeather() {
    let dt = new Date(),
    d = dt.getDate() < 10 ? '0'+dt.getDate() : dt.getDate(),
-   mon = dt.getMonth() + 1,
+   mon = (dt.getMonth() + 1) < 10 ? '0'+(dt.getMonth()+1) : (dt.getMonth()+1),
    j = dt.getFullYear(),
    h = dt.getHours(),
    url_date = j + "-" + mon + "-" + d;
 
+   console.log(url_date);
    console.log(mon);
 
    fetch('https://api.brightsky.dev/weather?lat=' + lat + '&lon=' + lon + '&date=' + url_date)
