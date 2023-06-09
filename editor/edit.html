@@ -57,9 +57,12 @@
         }),
         langEl = document.getElementById('langs'),
         model = editor.getModel(),
-        avLangs = editor.getModel()._languageService.languageIdCodec._languageIdToLanguage;
+        avLangs = editor.getModel()._languageService.languageIdCodec._languageIdToLanguage,
+        lang = "";
 
         langEl.addEventListener("change", () => {
+            lang = langEl.value;
+            console.log(lang);
             monaco.editor.setModelLanguage(model, langEl.value);
         });
 
@@ -73,7 +76,7 @@
             let text = editor.getValue(),
             dLink = document.createElement('a');
             dLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-            dLink.download = 'code' + '.txt';
+            dLink.download = 'code' + (lang == "" ? ".txt" : "."+lang);
             document.body.appendChild(dLink);
             dLink.click();
             document.body.removeChild(dLink);
